@@ -1,0 +1,1 @@
+insert into local_table select * from table@database_link;

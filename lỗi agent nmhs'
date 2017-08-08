@@ -1,0 +1,15 @@
+When you start to install with ./runInstaller, run in another terminal window (as root)
+ls 
+$ORACLE_HOME/sysman/lib/ins_emagent.mk
+
+
+At first this will produce an error, 
+as the installer wont have created this file yet.
+Once the file exists, 
+do:
+vi $ORACLE_HOME/sysman/lib/ins_emagent.mk
+
+Search for the line 
+$(MK_EMAGENT_NMECTL)
+ Change it to:
+$(MK_EMAGENT_NMECTL) -lnnz11

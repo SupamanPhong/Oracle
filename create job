@@ -1,0 +1,12 @@
+begin
+    dbms_scheduler.create_job(job_name        => 'GoldenGate_Job',
+                              job_type        => 'STORED_PROCEDURE',
+                              job_action      => 'InsertDataGoldenGateJob',
+                              start_date      => systimestamp,
+                              end_date        => null,
+                              repeat_interval => 'FREQ=MINUTELY;INTERVAL=30;',
+                              enabled         => true,
+                              auto_drop       => false,
+                              comments        => 'Job run to get miss data from source to destination in GG for XLA_TRANSACTION_ENTITIES table');
+end;
+/

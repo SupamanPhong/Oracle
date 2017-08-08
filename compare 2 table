@@ -1,0 +1,259 @@
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'XLA_TRANSACTION_ENTITIES@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.XLA_TRANSACTION_ENTITIES' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from XLA.XLA_TRANSACTION_ENTITIES@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.XLA_TRANSACTION_ENTITIES  a
+) b 
+     on a.id = b.id
+
+union all
+
+select   /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'ZX.ZX_RATES_TL@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.ZX_RATES_TL' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from ZX.ZX_RATES_TL@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.ZX_RATES_TL  a
+) b 
+     on a.id = b.id
+
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'ZX.ZX_RATES_B@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.ZX_RATES_B' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from ZX.ZX_RATES_B@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.ZX_RATES_B  a
+) b 
+     on a.id = b.id
+
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'CE.CE_BANK_ACCOUNTS@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.CE_BANK_ACCOUNTS' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from CE.CE_BANK_ACCOUNTS@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.CE_BANK_ACCOUNTS  a
+) b 
+     on a.id = b.id
+
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'CE.CE_BANK_ACCT_USES_ALL@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.CE_BANK_ACCT_USES_ALL' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from CE.CE_BANK_ACCT_USES_ALL@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.CE_BANK_ACCT_USES_ALL  a
+) b 
+     on a.id = b.id
+     
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'XLA.XLA_DISTRIBUTION_LINKS@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.XLA_DISTRIBUTION_LINKS' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from XLA.XLA_DISTRIBUTION_LINKS@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.XLA_DISTRIBUTION_LINKS  a
+) b 
+     on a.id = b.id
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'AP.AP_SUPPLIERS@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.AP_SUPPLIERS' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from AP.AP_SUPPLIERS@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.AP_SUPPLIERS  a
+) b 
+     on a.id = b.id
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'AP.AP_SUPPLIER_SITES_ALL@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.AP_SUPPLIER_SITES_ALL' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from AP.AP_SUPPLIER_SITES_ALL@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.AP_SUPPLIER_SITES_ALL  a
+) b 
+     on a.id = b.id
+     
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'IBY.IBY_EXTERNAL_PAYEES_ALL@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.IBY_EXTERNAL_PAYEES_ALL' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from IBY.IBY_EXTERNAL_PAYEES_ALL@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.IBY_EXTERNAL_PAYEES_ALL  a
+) b 
+     on a.id = b.id
+     
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'IBY.IBY_PMT_INSTR_USES_ALL@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.IBY_PMT_INSTR_USES_ALL' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from IBY.IBY_PMT_INSTR_USES_ALL@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.IBY_PMT_INSTR_USES_ALL  a
+) b 
+     on a.id = b.id
+     
+union all
+
+select  /*+ CARDINALITY(a, 10)  CARDINALITY(b, 10) */  
+       'IBY.IBY_EXT_BANK_ACCOUNTS@todr' tenbangnguon,
+       a.qty sodongbangnguon,
+       'FHO_EBS.IBY_EXT_BANK_ACCOUNTS' tenbangdich,
+       b.qty sodongbangdich,
+       nvl( a.qty, 0) -  nvl( b.qty, 0) sodonglech
+from
+(
+  select  /*+ CARDINALITY(a, 10)*/  
+          1 id, 
+          count(*) qty
+  from IBY.IBY_EXT_BANK_ACCOUNTS@todr a
+) a
+left join
+(
+  select   /*+ CARDINALITY(a, 10)*/  
+           1 id, 
+           count(*) qty
+  from FHO_EBS.IBY_EXT_BANK_ACCOUNTS  a
+) b 
+     on a.id = b.id

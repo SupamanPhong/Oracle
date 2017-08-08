@@ -1,0 +1,92 @@
+
+ 
+CREATE OR REPLACE PROCEDURE InsertDataGoldenGateJob
+IS
+BEGIN
+            --do du lieu vao DB dich nhung du lieu vua duoc sinh ra tren DB nguon  @todr
+            insert /*+ APPEND */ into Tenbang nologging (
+                   ENTITY_ID,
+                   APPLICATION_ID,
+                   LEGAL_ENTITY_ID,
+                   ENTITY_CODE,
+                   CREATION_DATE,
+                   CREATED_BY,
+                   LAST_UPDATE_DATE,
+                   LAST_UPDATED_BY,
+                   LAST_UPDATE_LOGIN,
+                   SOURCE_ID_INT_1,
+                   SOURCE_ID_CHAR_1,
+                   SECURITY_ID_INT_1,
+                   SECURITY_ID_INT_2,
+                   SECURITY_ID_INT_3,
+                   SECURITY_ID_CHAR_1,
+                   SECURITY_ID_CHAR_2,
+                   SECURITY_ID_CHAR_3,
+                   SOURCE_ID_INT_2,
+                   SOURCE_ID_CHAR_2,
+                   SOURCE_ID_INT_3,
+                   SOURCE_ID_CHAR_3,
+                   SOURCE_ID_INT_4,
+                   SOURCE_ID_CHAR_4,
+                   TRANSACTION_NUMBER,
+                   LEDGER_ID,
+                   VALUATION_METHOD,
+                   SOURCE_APPLICATION_ID,
+                   UPG_BATCH_ID,
+                   UPG_SOURCE_APPLICATION_ID,
+                   UPG_VALID_FLAG
+            )
+            select   /*+ CARDINALITY(a, 10) CARDINALITY(b, 10)*/ 
+                   b.ENTITY_ID,
+                   b.APPLICATION_ID,
+                   b.LEGAL_ENTITY_ID,
+                   b.ENTITY_CODE,
+                   b.CREATION_DATE,
+                   b.CREATED_BY,
+                   b.LAST_UPDATE_DATE,
+                   b.LAST_UPDATED_BY,
+                   b.LAST_UPDATE_LOGIN,
+                   b.SOURCE_ID_INT_1,
+                   b.SOURCE_ID_CHAR_1,
+                   b.SECURITY_ID_INT_1,
+                   b.SECURITY_ID_INT_2,
+                   b.SECURITY_ID_INT_3,
+                   b.SECURITY_ID_CHAR_1,
+                   b.SECURITY_ID_CHAR_2,
+                   b.SECURITY_ID_CHAR_3,
+                   b.SOURCE_ID_INT_2,
+                   b.SOURCE_ID_CHAR_2,
+                   b.SOURCE_ID_INT_3,
+                   b.SOURCE_ID_CHAR_3,
+                   b.SOURCE_ID_INT_4,
+                   b.SOURCE_ID_CHAR_4,
+                   b.TRANSACTION_NUMBER,
+                   b.LEDGER_ID,
+                   b.VALUATION_METHOD,
+                   b.SOURCE_APPLICATION_ID,
+                   b.UPG_BATCH_ID,
+                   b.UPG_SOURCE_APPLICATION_ID,
+                   b.UPG_VALID_FLAG
+             from   
+              ( 
+                    select  /*+ CARDINALITY(a, 10)*/
+                            a.ENTITY_ID 
+                    from XLA_TRANSACTION_ENTITIES@todr a
+                    where a.CREATION_DATE between sysdate - 1 and sysdate  
+                    minus 
+                    select  /*+ CARDINALITY(a, 10)*/
+                            a.ENTITY_ID 
+                    from FHO_EBS.XLA_TRANSACTION_ENTITIES a
+                    where a.CREATION_DATE between sysdate - 1 and sysdate
+              ) a
+              join
+              (
+                     select  /*+ CARDINALITY(a, 10)*/
+                            a.* 
+                    from XLA_TRANSACTION_ENTITIES@todr a
+                    where a.CREATION_DATE between sysdate - 1 and sysdate         
+              ) b
+                  on a.ENTITY_ID = b.ENTITY_ID;
+              commit; 
+END;
+/

@@ -1,0 +1,275 @@
+SQL> select log_mode from v$database;
+ 
+LOG_MODE
+------------
+NOARCHIVELOG
+ 
+SQL> shutdown immediate
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+ 
+SQL> startup mount
+ORACLE instance started.
+ 
+Total System Global Area 1068937216 bytes
+Fixed Size		    2260088 bytes
+Variable Size		  335545224 bytes
+Database Buffers	  725614592 bytes
+Redo Buffers		    5517312 bytes
+Database mounted.
+ 
+SQL> alter database archivelog;
+ 
+Database altered.
+ 
+SQL> alter database open;
+ 
+Database altered.
+ 
+SQL> select log_mode from v$database;
+ 
+LOG_MODE
+------------
+ARCHIVELOG
+ 
+
+Trường hợp muốn disable, ta cũng thao tác tương tự, và dùng lệnh sau:
+
+ 
+
+
+SQL> alter database noarchivelog;
+1
+SQL> alter database noarchivelog;
+ 
+
+Xác định vị trí lưu archived log
+
+ 
+
+
+SQL> archive log list
+
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     34
+Next log sequence to archive   36
+Current log sequence	       36
+
+SQL> show parameter db_recovery
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/fast_recovery_area
+db_recovery_file_dest_size	     big integer 4182M
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+SQL> archive log list
+ 
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     34
+Next log sequence to archive   36
+Current log sequence	       36
+ 
+SQL> show parameter db_recovery
+ 
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/fast_recovery_area
+db_recovery_file_dest_size	     big integer 4182M
+ 
+
+Dùng lệnh archive log list, ta có thể thấy vị trí lưu archived log hiện tại là USE_DB_RECOVERY_FILE_DEST, và kiểm tra parameter, ta thấy được đường dẫn của recovery file dest là /u01/app/oracle/fast_recovery_area, tức là vùng Fast recovery area (FRA). 
+
+ 
+
+Thường đây là cấu hình mặc định nếu ở step 7/12 khi tạo database ở trên, ta chọn cả 2 option Specify Fast Recovery Area và Enable Archiving.
+
+ 
+
+Trong trường hợp ta muốn chỉ định 1 vị trí lưu khác, ta có thể dùng các tham số log_archive_dest
+
+ 
+
+log_archive_dest & log_archive_duplex_dest: cặp tham số này đi với nhau, có từ các phiên bản trước. Hiện tại không nên dùng các tham số này nữa.
+ 
+
+log_archive_dest_n & log_archive_dest_state_n (n từ 1 -> 31): cặp tham số này đi với nhau. Tham số đầu thiết lập vị trí lưu archived log. Tham số sau đặt trạng thái của vị trí đó. Tham số state có 3 giá trị:
+enable: vị trí có thể lưu archived log. Mặc định các vị trí đều được enable
+defer: vị trí tạm ngưng không sử dụng
+alternate: bình thường không enable, tuy nhiên trong trường hợp các vị trí đang enable không lưu được archived log thì vị trí này sẽ được dùng thay thế
+Để thiết lập 1 ví trị lưu archived log, ta dùng lệnh sau:
+
+ 
+
+
+SQL> alter system set log_archive_dest_1='location=/u07';
+
+System altered.
+
+SQL> archive log list
+
+Database log mode Archive Mode
+Automatic archival Enabled
+Archive destination /u07
+Oldest online log sequence 35
+Next log sequence to archive 37
+Current log sequence 37
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+SQL> alter system set log_archive_dest_1='location=/u07';
+ 
+System altered.
+ 
+SQL> archive log list
+ 
+Database log mode Archive Mode
+Automatic archival Enabled
+Archive destination /u07
+Oldest online log sequence 35
+Next log sequence to archive 37
+Current log sequence 37
+ 
+
+Để chuyển lại dùng FRA
+
+ 
+
+
+SQL> alter system set log_archive_dest_1='location=USE_DB_RECOVERY_FILE_DEST';
+
+System altered.
+
+SQL> archive log list
+
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     36
+Next log sequence to archive   38
+Current log sequence	       38
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+SQL> alter system set log_archive_dest_1='location=USE_DB_RECOVERY_FILE_DEST';
+ 
+System altered.
+ 
+SQL> archive log list
+ 
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     36
+Next log sequence to archive   38
+Current log sequence	       38
+ 
+
+Cấu hình các tham số liên quan
+
+ 
+
+Có thể chỉ định format tên archived log file trong tham số log_archive_format
+
+ 
+
+
+SQL> show parameter archive_format
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_format		     string	 %t_%s_%r.dbf
+1
+2
+3
+4
+5
+SQL> show parameter archive_format
+ 
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_format		     string	 %t_%s_%r.dbf
+ 
+
+Lưu ý là format này chỉ có tác dụng nếu lưu trên disk bình thường và không phải vùng FRA. Nếu dùng FRA hay ASM, Oracle sẽ tự đặt tên cho archived log file, tham số này bị bỏ qua.
+
+ 
+
+Cấu hình số process ARCn bằng tham số log_archive_max_processes. Mặc định là 4, thường là dư xài luôn.
+
+ 
+
+
+SQL> show parameter log_archive_max_processes
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_max_processes	     integer	 4
+1
+2
+3
+4
+5
+SQL> show parameter log_archive_max_processes
+ 
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_max_processes	     integer	 4
+ 
+
+Cấu hình số archived log file tối thiểu được lưu bằng tham số log_archive_min_succeed_dest
+
+ 
+
+
+SQL> show parameter log_archive_min_succeed_dest
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_min_succeed_dest	     integer	 1
+1
+2
+3
+4
+5
+SQL> show parameter log_archive_min_succeed_dest
+ 
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_min_succeed_dest	     integer	 1

@@ -1,1 +1,1 @@
-delete archievlog until time 'sysdate -10';
+delete archivelog until time 'sysdate -10';

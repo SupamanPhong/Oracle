@@ -1,1 +1,2 @@
-delete archivelog until time 'sysdate -10';
+rman target /
+delete archivelog until time "sysdate -10";

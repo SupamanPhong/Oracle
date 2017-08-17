@@ -1,0 +1,17 @@
+select sys_context('userenv','db_name') from dual;
+
+SYS_CONTEXT('USERENV','DB_NAME')
+--------------------------------------------------------------------------------
+orcl
+
+SQL> select ora_database_name from dual;
+
+ORA_DATABASE_NAME
+--------------------------------------------------------------------------------
+ORCL.XYZ.COM
+
+SQL> select * from global_name;
+
+GLOBAL_NAME
+--------------------------------------------------------------------------------
+ORCL.XYZ.COM

@@ -1,0 +1,7 @@
+# xhost +
+access control disabled, clients can connect from any host
+#
+# su - oracle
+$
+$ echo $DISPLAY
+localhost:1.0

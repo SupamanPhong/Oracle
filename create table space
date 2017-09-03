@@ -1,0 +1,18 @@
+
+CREATE TABLESPACE tentablespace DATAFILE 
+  '/data/oradata/FMIS/datafile/tentablespace.dbf' SIZE 100M AUTOEXTEND ON NEXT 100M MAXSIZE UNLIMITED
+LOGGING
+ONLINE
+EXTENT MANAGEMENT LOCAL AUTOALLOCATE
+BLOCKSIZE 8K
+SEGMENT SPACE MANAGEMENT AUTO
+FLASHBACK ON;
+
+
+
+CREATE TEMPORARY TABLESPACE TEMP_NEW
+      TEMPFILE '/data/oradata/FISMIS/datafile/TEMP_NEW.tmp' SIZE 2000M
+      EXTENT MANAGEMENT LOCAL UNIFORM SIZE 16M;
+	  
+	  impdp "'/ as sysdba'" directory=
+impdp "'/ as sysdba'" schemas=fis directory=DUMP_DIR dumpfile=fis.dmp logfile=impdp_fis.log

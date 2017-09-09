@@ -1,0 +1,1 @@
+backup archivelog from sequence xxx to sequence yyy;
